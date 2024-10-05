@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FiMenu, FiShoppingCart, FiUsers, FiPackage, FiMessageCircle, FiSettings, FiLogOut, FiHeadphones, FiGift } from 'react-icons/fi';
+import { AuthContext } from '../contexts/authProvider.jsx'; // Importar o AuthContext
+import { useNavigate } from 'react-router-dom'; // Usar para redirecionar
 import Logo from '../components/Logo';
 
 const Dashboard = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Estado para controlar a abertura da sidebar em telas pequenas
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { logout } = useContext(AuthContext); // Pegar a função de logout do contexto
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // Desconectar o usuário
+    navigate('/login'); // Redirecionar para a página de login
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -39,7 +48,8 @@ const Dashboard = () => {
           <button className="flex items-center space-x-4 bg-gray-100 text-sm rounded-lg p-2">
             <FiGift /> <span>Free Gift Awaits You!</span>
           </button>
-          <button className="flex items-center space-x-4 text-red-500 text-sm p-2">
+          {/* Botão de Logout */}
+          <button onClick={handleLogout} className="flex items-center space-x-4 text-red-500 text-sm p-2">
             <FiLogOut /> <span>Logout</span>
           </button>
         </div>
@@ -104,13 +114,11 @@ const Dashboard = () => {
               <span>Acquisition</span>
               <span>This Week</span>
             </div>
-            {/* Add a marketing chart placeholder */}
             <div className="h-32 bg-gray-100 rounded-full"></div>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h4 className="text-gray-600 mb-4">Summary</h4>
-            {/* Add a summary chart placeholder */}
             <div className="h-32 bg-gray-100"></div>
           </div>
         </section>

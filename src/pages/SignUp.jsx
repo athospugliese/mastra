@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FiLock, FiMail, FiUser } from "react-icons/fi";
@@ -8,15 +8,39 @@ import ButtonMS from '../components/ButtonMS';
 import Logo from '../components/Logo';
 import Input from '../components/Input';
 import { Link } from 'react-router-dom';
+import useSWR, { mutate } from 'swr';
+import Modal from '../components/Modal';
 
 // Definindo o esquema de validação com Zod
 const signUpSchema = z.object({
-  fullName: z.string().min(1, { message: 'Full Name is required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
+  name: z.string().min(8, { message: 'É necessário nome completo' }),
+  email: z.string().email({ message: 'Endereço de e-mail inválido' }),
+  password: z.string().min(6, { message: 'Senha precisa de 6 digitos' }),
 });
 
-const SignUp= () => {
+// Função para realizar o POST da API de registro com fetch
+const registerUser = async (url, data) => {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Erro no registro');
+  }
+
+  return await res.json(); // Retorna a resposta da API
+};
+
+const SignUp = () => {
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [responseMessage, setResponseMessage] = useState(''); 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -25,8 +49,26 @@ const SignUp= () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  // Use mutate to handle POST with SWR
+  const onSubmit = async (data) => {
+    setErrorMessage('');
+    try {
+      // Mutate does not refetch, it allows us to update local state manually
+      const response = await mutate(
+        `${import.meta.env.VITE_API_URL}/api/register`, // Chave da requisição
+        () => registerUser(`${import.meta.env.VITE_API_URL}/api/register`, data), // Chamada da API
+        false // Não revalidar automaticamente
+      );
+
+      console.log('Usuário registrado com sucesso:', response);
+
+      // Definindo a mensagem de resposta e abrindo o modal
+      setResponseMessage(`Usuário registrado com sucesso: ${response.user.name} (${response.user.email})`);
+      setModalOpen(true);
+
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   return (
@@ -38,6 +80,12 @@ const SignUp= () => {
         </h2>
         <p className="text-sm text-center text-gray-600 mb-6">Crie sua conta</p>
 
+        {errorMessage && (
+          <div className="text-red-500 text-center mb-4">
+            {errorMessage}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Input de Nome Completo */}
           <Input
@@ -45,8 +93,8 @@ const SignUp= () => {
             type="text"
             placeholder="Nome completo"
             icon={<FiUser className="w-5 h-5 text-gray-500" />}
-            {...register('fullName')}
-            error={errors.fullName?.message}
+            {...register('name')}
+            error={errors.name?.message}
           />
 
           {/* Input de email */}
@@ -70,13 +118,21 @@ const SignUp= () => {
           />
 
           {/* Botão de login */}
-          <ButtonMS type="submit">Confirmar</ButtonMS>
+          <ButtonMS type="submit">
+            Confirmar
+          </ButtonMS>
 
           {/* Link para login */}
           <div className="text-sm text-center text-gray-600 mt-4">
-            Já possui uma conta? <Link to="/login"  className="text-primary-100 hover:underline">Login</Link>
+            Já possui uma conta? <Link to="/login" className="text-primary-100 hover:underline">Login</Link>
           </div>
         </form>
+
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+          <h2 className="text-lg font-bold mb-4">Sucesso!</h2>
+          <p>{responseMessage}</p>
+        </Modal>
+
       </Card>
     </div>
   );
