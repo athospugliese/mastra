@@ -1,11 +1,14 @@
 import React from 'react';
-import {  FiMail } from "react-icons/fi";
+import { FiMail } from "react-icons/fi";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import Frame1 from '../components/Frame1';
+import Frame2 from '../components/Frame2';
+import Frame3 from '../components/Frame3';
 
 const Home = () => {
   return (
@@ -20,25 +23,25 @@ const Home = () => {
             <a href="#" className="hover:underline">Delivery</a>
             <a href="#" className="hover:underline">Promo</a>
           </nav>
-          <button className="bg-primary-100 text-black px-4 py-2 rounded-lg">Download App</button>
+          <button className="bg-primary-100 text-black px-4 py-2 rounded-lg">Login</button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-black text-white py-20 text-center">
+      <section className="bg-gradient-to-r from-[#5C6BF1] to-[#283188] text-white py-20 text-center">
         <div className="container mx-auto">
-          <p className="text-lg">New! We Are Here Using AI Technology 🚀</p>
-          <h2 className="text-5xl font-bold my-4">
-            Unlock Your Full Potential<br />With <span className="text-primary-100">Layerio</span>.
+          <p className="text-lg font-poppins">Agora potencializado com Inteligência Artificial! </p>
+          <h2 className="text-5xl font-bold my-4 font-poppins">
+            Desbloqueie todo seu potencial<br />com a <span className="text-primary-100">Mastra</span>.
           </h2>
-          <p className="text-gray-400 max-w-xl mx-auto my-4">
-            With our website, you have access to a wide range of tools and resources designed to help 
-            you increase your productivity and achieve your goals.
+          <p className="text-gray-400 max-w-xl mx-auto my-4 font-inter">
+            Com nosso website, você tem acesso a uma série de ferramentas e recursos pensados para
+            aumentar os resultados da sua instituição de ensino e alcançar maiores objetivos.
           </p>
           <div className="flex justify-center mt-6">
-            <input 
-              type="email" 
-              placeholder="Enter Email Address" 
+            <input
+              type="email"
+              placeholder="Enter Email Address"
               className="px-4 py-2 w-80 text-black rounded-l-lg"
             />
             <button className="bg-primary-100 text-black px-6 py-2 rounded-r-lg">Get Started</button>
@@ -55,7 +58,7 @@ const Home = () => {
               Layerio Helps You Increase Your Daily Productivity
             </h2>
             <p className="text-gray-600 mb-4">
-              We are focused on creating products, services, and processes that not only innovative 
+              We are focused on creating products, services, and processes that not only innovative
               but also efficient in increasing productivity.
             </p>
             <button className="bg-primary-100 text-black px-6 py-2 rounded-lg">How It Works</button>
@@ -65,6 +68,24 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-2 space-y-10 gap-4 p-8">
+        <div className="flex items-center justify-center">
+          <Frame1 />
+        </div>
+        <div className="flex items-center justify-center">Item 2</div>
+        <div className="flex items-center justify-center">
+          <Frame2 />
+        </div>
+        <div className="flex items-center justify-center">
+          <Frame3 />
+        </div>
+        <div className="flex items-center justify-center">Item 5</div>
+        <div className="flex items-center justify-center">
+          {/* Adicione conteúdo aqui se necessário */}
+        </div>
+      </section>
+
+
 
       {/* FAQ Section */}
       <section className="bg-gray-100 py-20">
@@ -120,9 +141,9 @@ const Home = () => {
         <div className="container mx-auto text-center">
           <h3 className="text-2xl font-bold mb-4">Get The Latest Information From Us</h3>
           <div className="flex justify-center">
-            <input 
-              type="email" 
-              placeholder="Your Email Here" 
+            <input
+              type="email"
+              placeholder="Your Email Here"
               className="px-4 py-2 w-64 text-black rounded-l-lg"
             />
             <button className="bg-primary-100 text-black px-6 py-2 rounded-r-lg">Submit</button>
